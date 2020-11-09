@@ -1,18 +1,15 @@
-import marker.IO;
 import marker.MarkerContainer;
 import marker.MarkerException;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.MessageFormat;
 
 public class MarkerForm {
     private JPanel panel;
@@ -27,7 +24,9 @@ public class MarkerForm {
     private File file;
 
     public MarkerForm() {
-        final JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser("D:/Education/Стеганография/Стеганография/lab2");
+        final FileNameExtensionFilter filter = new FileNameExtensionFilter(null, "bmp");
+        fileChooser.addChoosableFileFilter(filter);
         downloadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,7 +53,6 @@ public class MarkerForm {
                 int returnVal = fileChooser.showSaveDialog(saveButton);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                        //IO.write(fileChooser.getSelectedFile().getPath(), Files.readAllBytes(file.toPath()));
                         Files.write(Path.of(fileChooser.getSelectedFile().getPath()), container.getContainer());
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
@@ -148,5 +146,4 @@ public class MarkerForm {
     public JComponent $$$getRootComponent$$$() {
         return panel;
     }
-
 }

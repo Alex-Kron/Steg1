@@ -33,18 +33,21 @@ public class MarkerContainer {
         int counter = 0;
         char n = '\n';
         char r = '\r';
-        for (int i = 0; i < container.length; i++) {
-            if ((char)container[i] == n && (char)container[i + 1] == r || (char)container[i] == r && (char)container[i + 1] == n ) {
-                if (counter < bitMessage.length) {
-                    if (bitMessage[counter++] == 1) {
-                        container[i] = (byte) n;
-                        container[i + 1] = (byte) r;
-                    } else {
-                        container[i] = (byte) r;
-                        container[i + 1] = (byte) n;
+        int i = 0;
+        while (i < container.length - 1) {
+                if (((char) container[i] == n && (char) container[i + 1] == r) || ((char) container[i] == r && (char) container[i + 1] == n)) {
+                    if (counter < bitMessage.length) {
+                        if (bitMessage[counter++] == 1) {
+                            container[i] = (byte) n;
+                            container[i + 1] = (byte) r;
+                        } else {
+                            container[i] = (byte) r;
+                            container[i + 1] = (byte) n;
+                        }
+                        i++;
                     }
                 }
-            }
+                i++;
         }
         containerFilled = true;
     }
@@ -58,13 +61,18 @@ public class MarkerContainer {
         char n = '\n';
         char r = '\r';
         byte[] res = new byte[containerCapacity];
-        for (int i = 0; i < container.length; i++) {
+        int i = 0;
+        while (i < container.length) {
             if ((char)container[i] == n && (char)container[i + 1] == r) {
                 res[counter++] = (byte)1;
+                i++;
+            } else {
+                if ((char) container[i] == r && (char) container[i + 1] == n) {
+                    res[counter++] = (byte) 0;
+                    i++;
+                }
             }
-            if ((char)container[i] == r && (char)container[i + 1] == n) {
-                res[counter++] = (byte)0;
-            }
+            i++;
         }
         res = reconvertMess(res);
         containerFilled = true;
@@ -76,8 +84,9 @@ public class MarkerContainer {
         for (int i = 0; i < container.length - 1; i++) {
             char n = '\n';
             char r = '\r';
-            if ((char)container[i] == n && (char)container[i + 1] == r || (char)container[i] == r && (char)container[i + 1] == n ) {
+            if (((char)container[i] == n && (char)container[i + 1] == r) || ((char)container[i] == r && (char)container[i + 1] == n )) {
                 res++;
+                i++;
             }
         }
         return res;
